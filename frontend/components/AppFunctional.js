@@ -86,12 +86,10 @@ export default function AppFunctional(props) {
     let currentSteps = index !== newIndex ? steps + 1 : steps;
     if (index === newIndex) {
       let directionMessage = `You can't go ${direction}`;
-      console.log(directionMessage);
       setMessage(directionMessage);
     }
     setIndex(newIndex);
     setSteps(currentSteps);
-    console.log(coordinates);
   }
 
   function onChange(evt) {
@@ -114,7 +112,6 @@ export default function AppFunctional(props) {
     axios
       .post("http://localhost:9000/api/result", payload)
       .then((res) => {
-        console.log(res.data.message);
         setWinMessage(res.data.message);
         setEmail(initialEmail);
       })
@@ -122,12 +119,14 @@ export default function AppFunctional(props) {
         setErrorMessage(err.response.data.message);
       });
   }
-  console.log(errorMessage);
+
   return (
     <div id="wrapper" className={props.className}>
       <div className="info">
-        <h3 id="coordinates">{getXYMessage()}</h3>
-        <h3 id="steps">
+        <h3 data-testid="coordinates" id="coordinates">
+          {getXYMessage()}
+        </h3>
+        <h3 data-testid="steps" id="steps">
           You moved {steps} {steps === 1 ? "time" : "times"}
         </h3>
       </div>

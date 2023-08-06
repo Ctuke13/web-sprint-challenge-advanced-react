@@ -1,21 +1,23 @@
 import React from "react";
-import * as rtl from "@testing-library/react";
+import { render, fireEvent, screen } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
 import AppClass from "./AppClass";
 import AppFunctional from "./AppFunctional";
 
 // Write your tests here
 test("sanity", () => {
-  expect(true).toBe(false);
+  expect(true).toBe(true);
 });
 
-it('renders heading "Welcome to the GRID', () => {
+it("steps increase by 1", () => {
   render(<AppFunctional />);
 
-  const h1 = screen.getByRole("h1");
+  const h1 = screen.getByTestId("steps");
+  const buttons = screen.getAllByRole("button");
 
-  expect(h1).toBeInTheDocument;
-  expect(h1).toHaveTextContent(/welcome to the grid/i);
+  expect(h1).toBeInTheDocument();
+  fireEvent.click(buttons[2]);
+  expect(h1).toHaveTextContent("You moved 1 time");
 });
 
 it("renders directionalbuttons", () => {
@@ -34,17 +36,20 @@ it("renders directionalbuttons", () => {
   expect(downButton).toBeInTheDocument();
 });
 
-it('renders "Class-Based" link', () => {
+it("Coordinates update when direction buttons are clicked", () => {
   render(<AppFunctional />);
-  const classBasedLink = screen.getByRole("link", { name: /class-based/i });
-  expect(classBasedLink).toBeInTheDocument();
+
+  const leftButton = screen.getAllByRole("button");
+  fireEvent.click(leftButton[0]);
+
+  const coordinates = screen.getByTestId(/coordinates/i);
+  expect(coordinates).toHaveTextContent("Coordinates (1,2)");
 });
 
-it("values change when types in email input", () => {
+it("values change when types in email input", async () => {
   render(<AppFunctional />);
 
-  const emailInput = screen.getByPlaceholder(/type email/i);
-  userEvent.type(emailInput, "abc@123.xzy");
-
-  expect(emailInput).toHaveTextContent("abc@123.xyz");
+  const emailInput = screen.getByPlaceholderText(/type email/i);
+  fireEvent.change(emailInput, { target: { value: "abc@123.xyz" } });
+  expect(emailInput).toHaveValue("abc@123.xyz");
 });

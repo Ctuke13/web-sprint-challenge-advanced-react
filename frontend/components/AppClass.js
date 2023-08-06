@@ -158,12 +158,11 @@ export default class AppClass extends React.Component {
   };
 
   render() {
-    console.log(this.state);
     const { className } = this.props;
     return (
       <div id="wrapper" className={className}>
         <div className="info">
-          <h3 id="coordinates">{this.state.coordinates}</h3>
+          <h3 id="coordinates">{this.getXYMessage()}</h3>
           <h3 id="steps">
             You moved {this.state.steps}{" "}
             {this.state.steps === 1 ? "time" : "times"}
